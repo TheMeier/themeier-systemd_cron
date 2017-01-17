@@ -1,5 +1,5 @@
 {
-  "name": "puppet-systemd_cron",
+  "name": "themeier-systemd_cron",
   "version": "0.1.1",
   "author": "Christoph Maser",
   "summary": "Create cron replacements with systemd services and timers",
