@@ -1,6 +1,6 @@
 {
   "name": "themeier-systemd_cron",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Christoph Maser",
   "summary": "Create cron replacements with systemd services and timers",
   "license": "Apache-2.0",
@@ -17,5 +17,14 @@
       "version_requirement": ">= 0.4.0 < 1.0.0"
     }
   ],
-  "data_provider": null
+  "data_provider": null,
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    }
+  ]
 }

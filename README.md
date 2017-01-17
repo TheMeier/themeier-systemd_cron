@@ -19,7 +19,7 @@ systemd timer OnCalendar= definition when to run the service as defined in
 https://www.freedesktop.org/software/systemd/man/systemd.time.html
  
 * `timer_description`
-string for Description= defintion of the service as defined in 
+optional string for Description= defintion of the service as defined in
 https://www.freedesktop.org/software/systemd/man/systemd.timer.html
   
 * `command`
@@ -33,7 +33,7 @@ https://www.freedesktop.org/software/systemd/man/systemd.service.html
 * `additional_timer_params`
 optional array with lines to append to [Timer] section
 ```
-example   'additional_timer_params'   => [ 'RandomizedDelaySec=10' ]
+'additional_timer_params'   => [ 'RandomizedDelaySec=10' ]
 ```
 
 * `additional_service_params`
