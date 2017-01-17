@@ -1,0 +1,14 @@
+# Managed by Puppet do not edit!
+
+[Unit]
+Description=<%= $description %>
+
+[Service]
+Type=oneshot
+ExecStart=<%= $command %>
+User=<%= $user %>
+<% unless $additional_params =~ Undef {
+  $additional_params.each |$param| { -%>
+<%= $param %>
+<% } -%>
+<% } -%>

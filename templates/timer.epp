@@ -1,0 +1,15 @@
+# Managed by Puppet do not edit!
+
+[Unit]
+Description=<%= $description %>
+
+[Timer]
+OnCalendar=<%= $on_calendar %>
+<% unless $additional_params =~ Undef {
+  $additional_params.each |$param| { -%>
+<%= $param %>
+<% } -%> 
+<% } -%> 
+
+[Install]
+WantedBy=timers.target
