@@ -6,9 +6,9 @@ define systemd_cron (
   String            $on_calendar,
   String            $command,
   String            $service_description,
-  Optional[String]  $timer_description = "timer for ${service_description}",
-  Optional[Boolean] $ensure = true,
-  Optional[String]  $user = 'root',
+  String            $timer_description = "timer for ${service_description}",
+  Boolean           $ensure = true,
+  String            $user = 'root',
   Optional[Array]   $additional_timer_params   = undef,
   Optional[Array]   $additional_service_params = undef,
 ) {
