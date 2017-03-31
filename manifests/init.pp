@@ -19,12 +19,12 @@
 #
 #   example: `'additional_service_params' => [ 'OnFailure=status-email-user@%n.service' ]`
 # @example Usage
-#   `systemd_cron { 'date':
+#   systemd_cron { 'date':
 #     on_calendar         => '*:0/10',
 #     command             => '/bin/date',
 #     service_description => 'Print date',
 #     timer_description   => 'Run date.service every 10 minutes',
-#   }`
+#   }
 define systemd_cron (
   String            $on_calendar,
   String            $command,
