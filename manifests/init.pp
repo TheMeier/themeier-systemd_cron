@@ -56,8 +56,7 @@ define systemd_cron (
       }
     ),
   }
-  ->
-  systemd::unit_file { "${title}_cron.timer":
+  -> systemd::unit_file { "${title}_cron.timer":
     ensure  => $file_ensure,
     content => epp('systemd_cron/timer.epp', {
       'description'       => $timer_description,
@@ -66,8 +65,7 @@ define systemd_cron (
       }
     ),
   }
-  ->
-  service { "${title}_cron.timer":
+  -> service { "${title}_cron.timer":
     ensure => $service_ensure,
     enable => $ensure,
   }
