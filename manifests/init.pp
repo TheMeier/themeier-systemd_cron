@@ -7,7 +7,7 @@
 #   as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param service_description string for Description= defintion of the service
 #   as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
-# @param ensure removes the instance if set to false
+# @param ensure removes the instance if set to false or absent
 # @param timer_description optional string for Description= defintion of the service
 #  as defined in https://www.freedesktop.org/software/systemd/man/systemd.timer.html
 # @param user username to run command User= as defined in 
@@ -26,24 +26,26 @@
 #     timer_description   => 'Run date.service every 10 minutes',
 #   }
 define systemd_cron (
-  String            $on_calendar,
-  String            $command,
-  String            $service_description,
-  String            $timer_description = "timer for ${service_description}",
-  Boolean           $ensure = true,
-  String            $user = 'root',
-  Optional[Array]   $additional_timer_params   = undef,
-  Optional[Array]   $additional_service_params = undef,
+  String                                    $on_calendar,
+  String                                    $command,
+  String                                    $service_description,
+  String                                    $timer_description         = "timer for ${service_description}",
+  Variant[Boolean,Enum['present','absent']] $ensure                    = true,
+  String                                    $user                      = 'root',
+  Optional[Array]                           $additional_timer_params   = undef,
+  Optional[Array]                           $additional_service_params = undef,
 ) {
 
   $file_ensure = $ensure ? {
-    false   => 'absent',
-    default => 'present'
+    false    => 'absent',
+    'absent' => 'absent',
+    default  => 'present'
   }
 
   $service_ensure = $ensure ? {
-    false   => 'stopped',
-    default => 'running'
+    false    => 'stopped',
+    'absent' => 'stopped',
+    default  => 'running'
   }
 
   systemd::unit_file { "${title}_cron.service":

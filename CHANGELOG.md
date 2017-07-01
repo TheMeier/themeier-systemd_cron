@@ -1,5 +1,9 @@
 # Changelog
 
+## 2017-07-01 Release 0.1.3
+
+make it possible to use absent/present for ensure parameter
+
 ## 2017-01-18 Release 0.1.2
 
 Add os support to metadata.json
