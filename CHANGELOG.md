@@ -1,8 +1,8 @@
 # Changelog
 
-## 2017-07-01 Release 0.1.4
+## 2017-07-10 Release 0.1.5
 
-[Full Changelog] (https://github.com/TheMeier/puppet-systemd_cron/compare/v0.1.3...v0.1.4)
+[Full Changelog] (https://github.com/TheMeier/puppet-systemd_cron/compare/v0.1.3...v0.1.5)
 
 Bugfixes: #3  'ensure => present' results in error
 
