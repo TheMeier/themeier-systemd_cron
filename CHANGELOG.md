@@ -1,5 +1,11 @@
 # Changelog
 
+## 2017-07-01 Release 0.1.4
+
+[Full Changelog] (https://github.com/TheMeier/puppet-systemd_cron/compare/v0.1.3...v0.1.4)
+
+Bugfixes: #3  'ensure => present' results in error
+
 ## 2017-07-01 Release 0.1.3
 
 make it possible to use absent/present for ensure parameter

@@ -43,9 +43,9 @@ define systemd_cron (
   }
 
   $service_ensure = $ensure ? {
-    false    => 'stopped',
-    'absent' => 'stopped',
-    default  => 'running'
+    false    => false,
+    'absent' => false,
+    default  => true,
   }
 
   systemd::unit_file { "${title}_cron.service":
@@ -69,7 +69,7 @@ define systemd_cron (
   }
   -> service { "${title}_cron.timer":
     ensure => $service_ensure,
-    enable => $ensure,
+    enable => $service_ensure,
   }
 
 }
