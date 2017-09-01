@@ -1,0 +1,5 @@
+---
+.travis.yml:
+  docker_sets:
+  - set: docker/debian-8
+  - set: docker/centos-7
