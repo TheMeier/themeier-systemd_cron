@@ -4,7 +4,7 @@
 [Full Changelog](https://github.com/TheMeier/puppet-systemd_cron/compare/v0.1.5...v0.1.6)
 
 **Implemented enhancements:**
-- [add basic acceptance test](https://github.com/TheMeier/puppet-systemd_cron/commit/ef48b5bd931e2b1d17f3649832388460998e96b8) ([TheMeier](https://github.com/TheMeier))
+- [add basic acceptance test](https://github.com/TheMeier/puppet-systemd_cron/commit/13a4f29f3fa5700c6e9ad3ae5bb870e05afa3ed9) ([TheMeier](https://github.com/TheMeier))
 
 
 **Merged pull requests:**
