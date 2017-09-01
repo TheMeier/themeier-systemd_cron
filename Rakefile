@@ -5,6 +5,7 @@ require 'puppet-strings/tasks'
 
 PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_variable_is_lowercase')
 
 desc 'Generate pooler nodesets'
 task :gen_nodeset do
