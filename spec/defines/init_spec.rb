@@ -3,10 +3,8 @@ require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
 describe 'systemd_cron' do
-
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os|
     context "on #{os}" do
-
       context 'test' do
         let :title do
           'date'
@@ -14,14 +12,14 @@ describe 'systemd_cron' do
 
         let :facts do
           {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           }
         end
         let :params do
           {
             on_calendar: '*:0/10',
             command: '/bin/date',
-            service_description: 'Print date cron'
+            service_description: 'Print date cron',
           }
         end
 
@@ -40,18 +38,18 @@ describe 'systemd_cron' do
         let :title do
           'date'
         end
-
         let :facts do
           {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           }
         end
+
         let :params do
           {
             on_calendar: '*:0/10',
             command: '/bin/date',
             service_description: 'Print date cron',
-            ensure: 'present'
+            ensure: 'present',
           }
         end
 
@@ -61,7 +59,6 @@ describe 'systemd_cron' do
         it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{Type=oneshot}) }
         it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{ExecStart=\/bin\/date}) }
         it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{User=root}) }
-
         it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{Description=timer for Print date cron}) }
         it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnCalendar=\*:0\/10}) }
       end
@@ -73,7 +70,7 @@ describe 'systemd_cron' do
 
         let :facts do
           {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           }
         end
         let :params do
@@ -83,7 +80,7 @@ describe 'systemd_cron' do
             service_description: 'Print date',
             timer_description: 'Run date.service every 10 minutes',
             additional_timer_params: ['RandomizedDelaySec=10'],
-            additional_service_params: ['OnFailure=status-email-user@%n.service']
+            additional_service_params: ['OnFailure=status-email-user@%n.service'],
           }
         end
 
