@@ -24,14 +24,43 @@ describe 'systemd_cron' do
         end
 
         it { is_expected.to compile }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{# Managed by Puppet do not edit!}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{Description=Print date}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{Type=oneshot}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{ExecStart=\/bin\/date}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{User=root}) }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{# Managed by Puppet do not edit!})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{Description=Print date})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{Type=oneshot})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{ExecStart=\/bin\/date})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{User=root})
+        }
 
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{Description=timer for Print date cron}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnCalendar=\*:0\/10}) }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer")
+            .with_content(%r{Description=timer for Print date cron})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer")
+            .with_content(%r{OnCalendar=\*:0\/10})
+        }
+        it {
+          is_expected.to contain_Systemd__Unit_file("#{title}_cron.service")
+            .that_comes_before("Systemd::Unit_file[#{title}_cron.timer]")
+        }
+        it {
+          is_expected.to contain_Systemd__Unit_file("#{title}_cron.timer")
+            .that_comes_before("Service[#{title}_cron.timer]")
+        }
       end
 
       context 'use ensure present' do
@@ -54,15 +83,64 @@ describe 'systemd_cron' do
         end
 
         it { is_expected.to compile }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{# Managed by Puppet do not edit!}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{Description=Print date}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{Type=oneshot}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{ExecStart=\/bin\/date}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service").with_content(%r{User=root}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{Description=timer for Print date cron}) }
-        it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnCalendar=\*:0\/10}) }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{# Managed by Puppet do not edit!})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{Description=Print date})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{Type=oneshot})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{ExecStart=\/bin\/date})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{User=root})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer")
+            .with_content(%r{Description=timer for Print date cron})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer")
+            .with_content(%r{OnCalendar=\*:0\/10})
+        }
       end
 
+      context 'ensure absent' do
+        let :title do
+          'date'
+        end
+
+        let :facts do
+          {
+            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          }
+        end
+        let :params do
+          {
+            on_calendar: '*:0/10',
+            command: '/bin/date',
+            service_description: 'Print date cron',
+            ensure: 'absent',
+          }
+        end
+
+        it {
+          is_expected.to contain_Service("#{title}_cron.timer")
+            .that_comes_before("Systemd::Unit_file[#{title}_cron.timer]")
+        }
+        it {
+          is_expected.to contain_Systemd__Unit_file("#{title}_cron.timer")
+            .that_comes_before("Systemd::Unit_file[#{title}_cron.service]")
+        }
+      end
       context 'optional params' do
         let :title do
           'date'

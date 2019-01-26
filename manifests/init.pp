@@ -1,7 +1,7 @@
 #
 # systemd_cron
 # Create systemd timer/service to replace cron jobs
-# @param on_calendar systemd timer OnCalendar= definition when to run the 
+# @param on_calendar systemd timer OnCalendar= definition when to run the
 #   service as defined in https://www.freedesktop.org/software/systemd/man/systemd.time.html
 # @param command command string for ExecStart= defintion of the service to run
 #   as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
@@ -10,7 +10,7 @@
 # @param ensure removes the instance if set to false or absent
 # @param timer_description optional string for Description= defintion of the service
 #  as defined in https://www.freedesktop.org/software/systemd/man/systemd.timer.html
-# @param user username to run command User= as defined in 
+# @param user username to run command User= as defined in
 #  https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param additional_timer_params optional array with lines to append to [Timer] section
 #
@@ -58,7 +58,7 @@ define systemd_cron (
       }
     ),
   }
-  -> systemd::unit_file { "${title}_cron.timer":
+  systemd::unit_file { "${title}_cron.timer":
     ensure  => $file_ensure,
     content => epp('systemd_cron/timer.epp', {
       'description'       => $timer_description,
@@ -67,9 +67,14 @@ define systemd_cron (
       }
     ),
   }
-  -> service { "${title}_cron.timer":
+  service { "${title}_cron.timer":
     ensure => $service_ensure,
     enable => $service_ensure,
   }
 
+  if $service_ensure {
+    Systemd::Unit_file["${title}_cron.service"] -> Systemd::Unit_file["${title}_cron.timer"] -> Service["${title}_cron.timer"]
+  } else {
+    Service["${title}_cron.timer"] -> Systemd::Unit_file["${title}_cron.timer"] -> Systemd::Unit_file["${title}_cron.service"]
+  }
 }
