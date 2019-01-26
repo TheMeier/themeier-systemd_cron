@@ -1,7 +1,7 @@
 {
-  "name": "themeier-systemd_cron",
-  "version": "0.1.7",
-  "author": "Christoph Maser",
+  "name": "puppet-systemd_cron",
+  "version": "0.2.0",
+  "author": "TheMeier",
   "summary": "Create cron replacements with systemd services and timers",
   "license": "Apache-2.0",
   "source": "https://github.com/TheMeier/puppet-systemd_cron.git",
