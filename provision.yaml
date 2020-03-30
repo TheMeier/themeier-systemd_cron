@@ -1,0 +1,10 @@
+---
+default:
+  provisioner: docker 
+  images: ['litmusimage/debian:8']
+travis_deb:
+  provisioner: docker
+  images: ['litmusimage/debian:8', 'litmusimage/debian:9', 'litmusimage/debian:10']
+travis_el:
+  provisioner: docker
+  images: ['litmusimage/centos:7', 'litmusimage/centos:8']

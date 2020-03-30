@@ -6,3 +6,7 @@ fixtures:
       repo: 'puppetlabs/stdlib'
   symlinks:
     systemd_cron: "#{source_dir}"
+  repositories:
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+    provision: 'https://github.com/puppetlabs/provision.git'
