@@ -1,8 +1,11 @@
 #
 # systemd_cron
 # Create systemd timer/service to replace cron jobs
+# You either need to define on_calendar or on_boot
 # @param on_calendar systemd timer OnCalendar= definition when to run the
 #   service as defined in https://www.freedesktop.org/software/systemd/man/systemd.time.html
+# @param on_boot systemd timer OnBootSec= definition 
+# @param on_unitactive systemd timer OnUnitActiveSec= definition 
 # @param command command string for ExecStart= defintion of the service to run
 #   as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param service_description string for Description= defintion of the service
@@ -26,15 +29,21 @@
 #     timer_description   => 'Run date.service every 10 minutes',
 #   }
 define systemd_cron (
-  String                                    $on_calendar,
   String                                    $command,
   String                                    $service_description,
+  Optional[String]                          $on_calendar               = undef,
+  Optional[String]                          $on_boot                   = undef,
+  Optional[String]                          $on_unitactive             = undef,
   String                                    $timer_description         = "timer for ${service_description}",
   Variant[Boolean,Enum['present','absent']] $ensure                    = true,
   String                                    $user                      = 'root',
   Optional[Array]                           $additional_timer_params   = undef,
   Optional[Array]                           $additional_service_params = undef,
 ) {
+
+  if ! $on_calendar and ! $on_boot {
+    fail("systemd_cron['${title}']: you need to define on_calendar or on_boot")
+  }
 
   $file_ensure = $ensure ? {
     false    => 'absent',
@@ -63,6 +72,8 @@ define systemd_cron (
     content => epp('systemd_cron/timer.epp', {
       'description'       => $timer_description,
       'on_calendar'       => $on_calendar,
+      'on_boot'           => $on_boot,
+      'on_unitactive'     => $on_unitactive,
       'additional_params' => $additional_timer_params,
       }
     ),
