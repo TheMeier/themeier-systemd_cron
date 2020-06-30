@@ -11,8 +11,7 @@ describe 'basic test' do
       }
     EOS
 
-    apply_manifest(pp, 'catch_failures' => true)
-    apply_manifest(pp, 'catch_changes' => true)
+    idempotent_apply(pp)
     describe file('/etc/systemd/system/date_cron.service') do
       it { is_expected.to be_file }
     end

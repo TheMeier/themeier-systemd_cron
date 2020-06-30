@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.2.2](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.2) (2020-03-31)
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.1...v0.2.2)
+
+**Implemented enhancements:**
+
+- update pdk templates
+- use litmus instead of beaker for acceptance tests
+
 ## [v0.2.1](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.1) (2019-03-19)
 [Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.0...v0.2.1)
 
