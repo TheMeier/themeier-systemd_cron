@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.2.3](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.3) (2020-06-02)
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.2...v0.2.3)
+
+**Implemented enhancements:**
+
+- add basic support for OnBoOtSec and OnUnitactivateSec
+
 ## [v0.2.2](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.2) (2020-03-31)
 [Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.1...v0.2.2)
 

@@ -1,6 +1,6 @@
 ---
 default:
-  provisioner: docker 
+  provisioner: docker
   images: ['litmusimage/debian:8']
 travis_deb:
   provisioner: docker

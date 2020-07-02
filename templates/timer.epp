@@ -7,17 +7,17 @@ Description=<%= $description %>
 <% if $on_calendar { -%>
 OnCalendar=<%= $on_calendar %>
 <% } -%>
-<% if $on_boot { -%>
-OnBootSec=<%= $on_boot %>
+<% if $on_boot_sec { -%>
+OnBootSec=<%= $on_boot_sec %>
 <% } -%>
-<% if $on_unitactive { -%>
-OnUnitActiveSec=<%= $on_unitactive %>
+<% if $on_unitactive_sec { -%>
+OnUnitActiveSec=<%= $on_unitactive_sec %>
 <% } -%>
 <% unless $additional_params =~ Undef {
   $additional_params.each |$param| { -%>
 <%= $param %>
-<% } -%> 
-<% } -%> 
+<% } -%>
+<% } -%>
 
 [Install]
 WantedBy=timers.target

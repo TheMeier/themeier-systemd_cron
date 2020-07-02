@@ -5,7 +5,7 @@
 
 **Defined types**
 
-* [`systemd_cron`](#systemd_cron): systemd_cron Create systemd timer/service to replace cron jobs
+* [`systemd_cron`](#systemd_cron): systemd_cron Create systemd timer/service to replace cron jobs You either need to define on_calendar or on_boot_sec
 
 ## Defined types
 
@@ -13,6 +13,7 @@
 
 systemd_cron
 Create systemd timer/service to replace cron jobs
+You either need to define on_calendar or on_boot_sec
 
 #### Examples
 
@@ -33,10 +34,28 @@ The following parameters are available in the `systemd_cron` defined type.
 
 ##### `on_calendar`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 systemd timer OnCalendar= definition when to run the
 service as defined in https://www.freedesktop.org/software/systemd/man/systemd.time.html
+
+Default value: `undef`
+
+##### `on_boot_sec`
+
+Data type: `Optional[Integer]`
+
+systemd timer OnBootSec= definition
+
+Default value: `undef`
+
+##### `on_unitactive_sec`
+
+Data type: `Optional[Integer]`
+
+systemd timer OnUnitActiveSec= definition
+
+Default value: `undef`
 
 ##### `command`
 
