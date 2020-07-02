@@ -3,6 +3,12 @@ require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
 describe 'systemd_cron' do
+  let :facts do
+    {
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    }
+  end
+
   on_supported_os.each do |os|
     context "on #{os}" do
       context 'test' do
@@ -10,11 +16,6 @@ describe 'systemd_cron' do
           'date'
         end
 
-        let :facts do
-          {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          }
-        end
         let :params do
           {
             on_calendar: '*:0/10',
@@ -67,11 +68,6 @@ describe 'systemd_cron' do
         let :title do
           'date'
         end
-        let :facts do
-          {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          }
-        end
 
         let :params do
           {
@@ -118,11 +114,6 @@ describe 'systemd_cron' do
           'date'
         end
 
-        let :facts do
-          {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          }
-        end
         let :params do
           {
             on_calendar: '*:0/10',
@@ -146,11 +137,6 @@ describe 'systemd_cron' do
           'date'
         end
 
-        let :facts do
-          {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          }
-        end
         let :params do
           {
             on_calendar: '*:0/10',
@@ -167,6 +153,41 @@ describe 'systemd_cron' do
 
         it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{RandomizedDelaySec=10}) }
       end
+    end
+    context 'failue when not passing on_calendar or on_boot_sec' do
+      let :title do
+        'date'
+      end
+
+      let :params do
+        {
+          command: '/usr/bin/date',
+          service_description: 'Print date',
+        }
+      end
+
+      it {
+        is_expected.to compile.and_raise_error(%r{you need to define on_calendar or on_boot_sec})
+      }
+    end
+    context 'with on_boot_sec' do
+      let :title do
+        'date'
+      end
+
+      let :params do
+        {
+          on_boot_sec: 100,
+          on_unitactive_sec: 100,
+          command: '/usr/bin/date',
+          service_description: 'Print date',
+          timer_description: 'Run date.service 100 seconds after boot',
+        }
+      end
+
+      it { is_expected.to compile }
+      it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnBootSec=100}) }
+      it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnUnitActiveSec=100}) }
     end
   end
 end

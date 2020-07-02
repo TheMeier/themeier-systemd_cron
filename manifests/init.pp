@@ -1,11 +1,11 @@
 #
 # systemd_cron
 # Create systemd timer/service to replace cron jobs
-# You either need to define on_calendar or on_boot
+# You either need to define on_calendar or on_boot_sec
 # @param on_calendar systemd timer OnCalendar= definition when to run the
 #   service as defined in https://www.freedesktop.org/software/systemd/man/systemd.time.html
-# @param on_boot systemd timer OnBootSec= definition 
-# @param on_unitactive systemd timer OnUnitActiveSec= definition 
+# @param on_boot_sec systemd timer OnBootSec= definition
+# @param on_unitactive_sec systemd timer OnUnitActiveSec= definition
 # @param command command string for ExecStart= defintion of the service to run
 #   as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param service_description string for Description= defintion of the service
@@ -32,8 +32,8 @@ define systemd_cron (
   String                                    $command,
   String                                    $service_description,
   Optional[String]                          $on_calendar               = undef,
-  Optional[String]                          $on_boot                   = undef,
-  Optional[String]                          $on_unitactive             = undef,
+  Optional[Integer]                         $on_boot_sec               = undef,
+  Optional[Integer]                         $on_unitactive_sec         = undef,
   String                                    $timer_description         = "timer for ${service_description}",
   Variant[Boolean,Enum['present','absent']] $ensure                    = true,
   String                                    $user                      = 'root',
@@ -41,8 +41,8 @@ define systemd_cron (
   Optional[Array]                           $additional_service_params = undef,
 ) {
 
-  if ! $on_calendar and ! $on_boot {
-    fail("systemd_cron['${title}']: you need to define on_calendar or on_boot")
+  if ! $on_calendar and ! $on_boot_sec {
+    fail("systemd_cron['${title}']: you need to define on_calendar or on_boot_sec")
   }
 
   $file_ensure = $ensure ? {
@@ -72,8 +72,8 @@ define systemd_cron (
     content => epp('systemd_cron/timer.epp', {
       'description'       => $timer_description,
       'on_calendar'       => $on_calendar,
-      'on_boot'           => $on_boot,
-      'on_unitactive'     => $on_unitactive,
+      'on_boot_sec'       => $on_boot_sec,
+      'on_unitactive_sec' => $on_unitactive_sec,
       'additional_params' => $additional_timer_params,
       }
     ),
