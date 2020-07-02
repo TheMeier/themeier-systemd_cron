@@ -43,7 +43,7 @@ Default value: `undef`
 
 ##### `on_boot_sec`
 
-Data type: `Optional[Integer]`
+Data type: `Optional[Variant[Integer,String]]`
 
 systemd timer OnBootSec= definition
 
@@ -51,7 +51,7 @@ Default value: `undef`
 
 ##### `on_unitactive_sec`
 
-Data type: `Optional[Integer]`
+Data type: `Optional[Variant[Integer,String]]`
 
 systemd timer OnUnitActiveSec= definition
 
