@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.2.4](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.4) (2020-06-02)
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.3...v0.2.4)
+
+**Implemented enhancements:**
+
+- update pdk templates
+- update stdlib dependency version
+
 ## [v0.2.3](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.3) (2020-06-02)
 [Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.2...v0.2.3)
 
