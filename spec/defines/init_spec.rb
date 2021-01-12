@@ -189,5 +189,21 @@ describe 'systemd_cron' do
       it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnBootSec=100}) }
       it { is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer").with_content(%r{OnUnitActiveSec=100}) }
     end
+    context 'with / in title' do
+      let :title do
+        't/i/t/l/e'
+      end
+      let :params do
+        {
+          on_calendar: '*:0/10',
+          command: '/bin/true',
+          service_description: 'do nothing !',
+        }
+      end
+
+      it { is_expected.to compile }
+      it { is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.timer') }
+      it { is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.service') }
+    end
   end
 end

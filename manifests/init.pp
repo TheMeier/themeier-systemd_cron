@@ -57,7 +57,9 @@ define systemd_cron (
     default  => true,
   }
 
-  systemd::unit_file { "${title}_cron.service":
+  $unit_name = regsubst($title, '/' , '_', 'G')
+
+  systemd::unit_file { "${unit_name}_cron.service":
     ensure  => $file_ensure,
     content => epp('systemd_cron/service.epp', {
       'description'       => $service_description,
@@ -67,7 +69,7 @@ define systemd_cron (
       }
     ),
   }
-  systemd::unit_file { "${title}_cron.timer":
+  systemd::unit_file { "${unit_name}_cron.timer":
     ensure  => $file_ensure,
     content => epp('systemd_cron/timer.epp', {
       'description'       => $timer_description,
@@ -78,14 +80,14 @@ define systemd_cron (
       }
     ),
   }
-  service { "${title}_cron.timer":
+  service { "${unit_name}_cron.timer":
     ensure => $service_ensure,
     enable => $service_ensure,
   }
 
   if $service_ensure {
-    Systemd::Unit_file["${title}_cron.service"] -> Systemd::Unit_file["${title}_cron.timer"] -> Service["${title}_cron.timer"]
+    Systemd::Unit_file["${unit_name}_cron.service"] -> Systemd::Unit_file["${unit_name}_cron.timer"] -> Service["${unit_name}_cron.timer"]
   } else {
-    Service["${title}_cron.timer"] -> Systemd::Unit_file["${title}_cron.timer"] -> Systemd::Unit_file["${title}_cron.service"]
+    Service["${unit_name}_cron.timer"] -> Systemd::Unit_file["${unit_name}_cron.timer"] -> Systemd::Unit_file["${unit_name}_cron.service"]
   }
 }
