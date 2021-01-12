@@ -1,6 +1,7 @@
 ---
 spec/spec_helper.rb:
   coverage_report: true
+  mock_with: ':rspec'
 
 .travis.yml:
   use_litmus: true
