@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.2.5](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.5) (2020-06-02)
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.4...v0.2.5)
+
+**Implemented enhancements:**
+
+- allow resource title to contain slashes
+
 ## [v0.2.4](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.4) (2020-06-02)
 [Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.3...v0.2.4)
 
