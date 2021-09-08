@@ -13,6 +13,8 @@
 # @param ensure removes the instance if set to false or absent
 # @param timer_description optional string for Description= defintion of the service
 #  as defined in https://www.freedesktop.org/software/systemd/man/systemd.timer.html
+# @param type type of service as defined in
+#  https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param user username to run command User= as defined in
 #  https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param additional_timer_params optional array with lines to append to [Timer] section
@@ -36,6 +38,7 @@ define systemd_cron (
   Optional[Variant[Integer,String]]         $on_unitactive_sec         = undef,
   String                                    $timer_description         = "timer for ${service_description}",
   Variant[Boolean,Enum['present','absent']] $ensure                    = true,
+  String                                    $type                      = 'oneshot',
   String                                    $user                      = 'root',
   Optional[Array]                           $additional_timer_params   = undef,
   Optional[Array]                           $additional_service_params = undef,
