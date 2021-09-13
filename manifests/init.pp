@@ -68,6 +68,7 @@ define systemd_cron (
       'description'       => $service_description,
       'command'           => $command,
       'user'              => $user,
+      'type'              => $type,
       'additional_params' => $additional_service_params,
       }
     ),
