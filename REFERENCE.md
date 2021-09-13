@@ -88,6 +88,15 @@ as defined in https://www.freedesktop.org/software/systemd/man/systemd.timer.htm
 
 Default value: "timer for ${service_description}"
 
+##### `type`
+
+Data type: `String`
+
+type of the systemd service as defined in
+https://www.freedesktop.org/software/systemd/man/systemd.service.html
+
+Default value: 'oneshot'
+
 ##### `user`
 
 Data type: `String`

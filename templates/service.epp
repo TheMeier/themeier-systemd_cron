@@ -4,7 +4,7 @@
 Description=<%= $description %>
 
 [Service]
-Type=oneshot
+Type=<%= $type %>
 ExecStart=<%= $command %>
 User=<%= $user %>
 <% unless $additional_params =~ Undef {

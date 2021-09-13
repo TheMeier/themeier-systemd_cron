@@ -43,6 +43,10 @@ describe 'systemd_cron' do
         }
         it {
           is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
+            .with_content(%r{Type=oneshot})
+        }
+        it {
+          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{User=root})
         }
 
