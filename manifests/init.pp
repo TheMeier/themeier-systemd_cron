@@ -31,8 +31,8 @@
 #     timer_description   => 'Run date.service every 10 minutes',
 #   }
 define systemd_cron (
-  String                                    $command,
-  String                                    $service_description,
+  Optional[String]                          $command                   = undef,
+  Optional[String]                          $service_description       = undef,
   Optional[String]                          $on_calendar               = undef,
   Optional[Variant[Integer,String]]         $on_boot_sec               = undef,
   Optional[Variant[Integer,String]]         $on_unitactive_sec         = undef,
@@ -43,8 +43,16 @@ define systemd_cron (
   Optional[Array]                           $additional_timer_params   = undef,
   Optional[Array]                           $additional_service_params = undef,
 ) {
-  if ! $on_calendar and ! $on_boot_sec {
-    fail("systemd_cron['${title}']: you need to define on_calendar or on_boot_sec")
+  if $ensure == true or $ensure == 'present' {
+    if ! $on_calendar and ! $on_boot_sec {
+      fail("systemd_cron['${title}']: you need to define on_calendar or on_boot_sec")
+    }
+    if ! $command {
+      fail("systemd_cron['${title}']: you need to define command")
+    }
+    if ! $service_description {
+      fail("systemd_cron['${title}']: you need to define service_description")
+    }
   }
 
   $file_ensure = $ensure ? {
@@ -58,6 +66,7 @@ define systemd_cron (
     'absent' => false,
     default  => true,
   }
+
 
   $unit_name = regsubst($title, '/' , '_', 'G')
 
