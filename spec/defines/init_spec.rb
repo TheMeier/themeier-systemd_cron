@@ -28,25 +28,10 @@ describe 'systemd_cron' do
         it {
           is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{# Managed by Puppet do not edit!})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{Description=Print date})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{Type=oneshot})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{ExecStart=\/bin\/date})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{Type=oneshot})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{User=root})
         }
 
@@ -120,9 +105,6 @@ describe 'systemd_cron' do
 
         let :params do
           {
-            on_calendar: '*:0/10',
-            command: '/bin/date',
-            service_description: 'Print date cron',
             ensure: 'absent',
           }
         end
@@ -208,6 +190,38 @@ describe 'systemd_cron' do
       it { is_expected.to compile }
       it { is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.timer') }
       it { is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.service') }
+    end
+    context 'without command' do
+      let :title do
+        'date'
+      end
+
+      let :params do
+        {
+          on_boot_sec: 100,
+          on_unitactive_sec: 100,
+          service_description: 'Print date',
+          timer_description: 'Run date.service 100 seconds after boot',
+        }
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{you need to define command}) }
+    end
+    context 'without service_description' do
+      let :title do
+        'date'
+      end
+
+      let :params do
+        {
+          on_boot_sec: 100,
+          on_unitactive_sec: 100,
+          command: 'date',
+          timer_description: 'Run date.service 100 seconds after boot',
+        }
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{you need to define service_description}) }
     end
   end
 end

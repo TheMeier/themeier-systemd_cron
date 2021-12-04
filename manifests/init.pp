@@ -31,8 +31,8 @@
 #     timer_description   => 'Run date.service every 10 minutes',
 #   }
 define systemd_cron (
-  String                                    $command,
-  String                                    $service_description,
+  Optional[String]                          $command                   = undef,
+  Optional[String]                          $service_description       = undef,
   Optional[String]                          $on_calendar               = undef,
   Optional[Variant[Integer,String]]         $on_boot_sec               = undef,
   Optional[Variant[Integer,String]]         $on_unitactive_sec         = undef,
@@ -43,9 +43,16 @@ define systemd_cron (
   Optional[Array]                           $additional_timer_params   = undef,
   Optional[Array]                           $additional_service_params = undef,
 ) {
-
-  if ! $on_calendar and ! $on_boot_sec {
-    fail("systemd_cron['${title}']: you need to define on_calendar or on_boot_sec")
+  if $ensure == true or $ensure == 'present' {
+    if ! $on_calendar and ! $on_boot_sec {
+      fail("systemd_cron['${title}']: you need to define on_calendar or on_boot_sec")
+    }
+    if ! $command {
+      fail("systemd_cron['${title}']: you need to define command")
+    }
+    if ! $service_description {
+      fail("systemd_cron['${title}']: you need to define service_description")
+    }
   }
 
   $file_ensure = $ensure ? {
@@ -65,22 +72,22 @@ define systemd_cron (
   systemd::unit_file { "${unit_name}_cron.service":
     ensure  => $file_ensure,
     content => epp('systemd_cron/service.epp', {
-      'description'       => $service_description,
-      'command'           => $command,
-      'user'              => $user,
-      'type'              => $type,
-      'additional_params' => $additional_service_params,
+        'description'       => $service_description,
+        'command'           => $command,
+        'user'              => $user,
+        'type'              => $type,
+        'additional_params' => $additional_service_params,
       }
     ),
   }
   systemd::unit_file { "${unit_name}_cron.timer":
     ensure  => $file_ensure,
     content => epp('systemd_cron/timer.epp', {
-      'description'       => $timer_description,
-      'on_calendar'       => $on_calendar,
-      'on_boot_sec'       => $on_boot_sec,
-      'on_unitactive_sec' => $on_unitactive_sec,
-      'additional_params' => $additional_timer_params,
+        'description'       => $timer_description,
+        'on_calendar'       => $on_calendar,
+        'on_boot_sec'       => $on_boot_sec,
+        'on_unitactive_sec' => $on_unitactive_sec,
+        'additional_params' => $additional_timer_params,
       }
     ),
   }

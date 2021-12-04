@@ -9,9 +9,9 @@
 # Learn more about module testing here:
 # https://docs.puppet.com/guides/tests_smoke.html
 #
-  systemd_cron { 'date':
-    on_calendar         => '*:0/10',
-    command             => '/bin/date',
-    service_description => 'Print date',
-    timer_description   => 'Run date.service every 10 minutes',
-  }
+systemd_cron { 'date':
+  on_calendar         => '*:0/10',
+  command             => '/bin/date',
+  service_description => 'Print date',
+  timer_description   => 'Run date.service every 10 minutes',
+}

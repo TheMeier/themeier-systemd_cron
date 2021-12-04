@@ -1,5 +1,31 @@
 # Change Log
 
+## [v1.0.0](https://github.com/TheMeier/themeier-systemd_cron/tree/v1.0.0) (2021-12-04)
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.5...v0.2.5)
+
+
+**Breaking changes:**
+
+- Drop EoL Puppet 5 support
+- Drop EoL Debian 8 support
+- Drop Eol RHEL/CentOS 6 support
+
+
+**Implemented enhancements:**
+
+- Add Rocky 8 support
+- Add voxpupuli-puppet-lint-plugins
+- PDK update 
+- Make command, service_description and on_calendar/on_boot_sec optional when ensure is set to absent 
+
+
+## [v0.2.6](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.6) (2021-01-13)
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.5...v0.2.5)
+
+**Implemented enhancements:**
+
+- allow to configure service type
+
 ## [v0.2.5](https://github.com/TheMeier/themeier-systemd_cron/tree/v0.2.5) (2020-06-02)
 [Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v0.2.4...v0.2.5)
 
