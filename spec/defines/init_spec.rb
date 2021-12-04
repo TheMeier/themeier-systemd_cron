@@ -28,25 +28,10 @@ describe 'systemd_cron' do
         it {
           is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{# Managed by Puppet do not edit!})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{Description=Print date})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{Type=oneshot})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{ExecStart=\/bin\/date})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{Type=oneshot})
-        }
-        it {
-          is_expected.to contain_file("/etc/systemd/system/#{title}_cron.service")
             .with_content(%r{User=root})
         }
 

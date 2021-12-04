@@ -43,7 +43,6 @@ define systemd_cron (
   Optional[Array]                           $additional_timer_params   = undef,
   Optional[Array]                           $additional_service_params = undef,
 ) {
-
   if ! $on_calendar and ! $on_boot_sec {
     fail("systemd_cron['${title}']: you need to define on_calendar or on_boot_sec")
   }
@@ -65,22 +64,22 @@ define systemd_cron (
   systemd::unit_file { "${unit_name}_cron.service":
     ensure  => $file_ensure,
     content => epp('systemd_cron/service.epp', {
-      'description'       => $service_description,
-      'command'           => $command,
-      'user'              => $user,
-      'type'              => $type,
-      'additional_params' => $additional_service_params,
+        'description'       => $service_description,
+        'command'           => $command,
+        'user'              => $user,
+        'type'              => $type,
+        'additional_params' => $additional_service_params,
       }
     ),
   }
   systemd::unit_file { "${unit_name}_cron.timer":
     ensure  => $file_ensure,
     content => epp('systemd_cron/timer.epp', {
-      'description'       => $timer_description,
-      'on_calendar'       => $on_calendar,
-      'on_boot_sec'       => $on_boot_sec,
-      'on_unitactive_sec' => $on_unitactive_sec,
-      'additional_params' => $additional_timer_params,
+        'description'       => $timer_description,
+        'on_calendar'       => $on_calendar,
+        'on_boot_sec'       => $on_boot_sec,
+        'on_unitactive_sec' => $on_unitactive_sec,
+        'additional_params' => $additional_timer_params,
       }
     ),
   }

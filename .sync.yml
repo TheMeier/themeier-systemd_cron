@@ -5,3 +5,8 @@ spec/spec_helper.rb:
 
 .travis.yml:
   use_litmus: true
+
+Gemfile:
+  required:
+    ':all_stages':
+      - gem: voxpupuli-puppet-lint-plugins
