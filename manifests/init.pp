@@ -67,7 +67,6 @@ define systemd_cron (
     default  => true,
   }
 
-
   $unit_name = regsubst($title, '/' , '_', 'G')
 
   systemd::unit_file { "${unit_name}_cron.service":
