@@ -187,9 +187,13 @@ describe 'systemd_cron' do
         }
       end
 
-      it { is_expected.to compile }
-      it { is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.timer') }
-      it { is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.service') }
+      it {
+        is_expected.to compile
+        is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.timer')
+        is_expected.to contain_systemd__unit_file('t_i_t_l_e_cron.timer')
+        is_expected.to contain_file('/etc/systemd/system/t_i_t_l_e_cron.service')
+        is_expected.to contain_systemd__unit_file('t_i_t_l_e_cron.service')
+      }
     end
     context 'without command' do
       let :title do
