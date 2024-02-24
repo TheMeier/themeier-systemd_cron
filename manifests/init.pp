@@ -1,7 +1,6 @@
-#
-# systemd_cron
-# Create systemd timer/service to replace cron jobs
-# You either need to define on_calendar or on_boot_sec
+# @summary systemd_cron
+#   Create systemd timer/service to replace cron jobs
+#   You either need to define on_calendar or on_boot_sec
 # @param on_calendar systemd timer OnCalendar= definition when to run the
 #   service as defined in https://www.freedesktop.org/software/systemd/man/systemd.time.html
 # @param on_boot_sec systemd timer OnBootSec= definition
@@ -17,12 +16,34 @@
 #  https://www.freedesktop.org/software/systemd/man/systemd.service.html
 # @param user username to run command User= as defined in
 #  https://www.freedesktop.org/software/systemd/man/systemd.service.html
-# @param additional_timer_params optional array with lines to append to [Timer] section
+# @param additional_timer_params **Deprecated** use `timer_overrides` instead
+#   can not be used in combination with `timer_overrides`
+#
+#   array with lines to append to [Timer] section
 #
 #   example: `'additional_timer_params'   => [ 'RandomizedDelaySec=10' ]`
-# @param additional_service_params optional array with lines to append to [Service] section
+# @param additional_service_params **Deprecated** use `service_overrides` instead
+#   can not be used in combination with `service_overrides`
 #
-#   example: `'additional_service_params' => [ 'OnFailure=status-email-user@%n.service' ]`
+#   array with lines to append to [Service] section
+#
+#   example: `'additional_service_params' => [ 'User=bob' ]`
+# @param service_overrides override for the`[Service]` section of the service
+#   can not be used in combination with `additional_service_params`
+#
+#   example: `'service_overrides' => { 'Wants' => 'network-online.target' }`
+# @param timer_overrides override for the`[Timer]` section of the timer
+#   can not be used in combination with `additional_timer_params`
+#
+#   example: `'timer_overrides' => { 'OnBootSec' => '10' }`
+# @param service_unit_overrides override for the`[Unit]` section of the service
+#   can not be used in combination with `additional_service_params`
+#
+#   example: `'service_unit_overrides' => { 'Wants' => 'network-online.target' }`
+# @param timer_unit_overrides override for the `[Unit]` section of the timer
+#   can not be used in combination with `additional_timer_params`
+#
+#   example: `'timer_unit_overrides' => { 'Documentation' => 'Very special timer' }`
 # @example Usage
 #   systemd_cron { 'date':
 #     on_calendar         => '*:0/10',
@@ -40,8 +61,12 @@ define systemd_cron (
   Variant[Boolean,Enum['present','absent']] $ensure                    = true,
   String                                    $type                      = 'oneshot',
   String                                    $user                      = 'root',
-  Optional[Array]                           $additional_timer_params   = undef,
-  Optional[Array]                           $additional_service_params = undef,
+  Optional[Array]                           $additional_timer_params   = undef, # remove in V3
+  Optional[Array]                           $additional_service_params = undef, # remove in V3
+  Systemd::Unit::Service                    $service_overrides         = {},
+  Systemd::Unit::Timer                      $timer_overrides           = {},
+  Systemd::Unit::Unit                       $timer_unit_overrides      = {},
+  Systemd::Unit::Unit                       $service_unit_overrides    = {},
 ) {
   if $ensure == true or $ensure == 'present' {
     if ! $on_calendar and ! $on_boot_sec {
@@ -50,9 +75,38 @@ define systemd_cron (
     if ! $command {
       fail("systemd_cron['${title}']: you need to define command")
     }
-    if ! $service_description {
-      fail("systemd_cron['${title}']: you need to define service_description")
+  }
+
+  # remove in V3
+  if $additional_timer_params and ( $timer_overrides != {} or $timer_unit_overrides != {}) {
+    fail("systemd_cron['${title}']: you can't use additional_timer_params and timer_overrides at the same time")
+  }
+  # remove in V3
+  if $additional_service_params and ( $service_overrides != {} or $service_unit_overrides != {}) {
+    fail("systemd_cron['${title}']: you can't use additional_service_params and service_overrides at the same time")
+  }
+  # remove in V3
+  if $additional_timer_params {
+    warning("Parameter 'additional_timer_params is deprecated. Please use the alternative parameter 'timer_overrides' instead.")
+    $_timer_overrides = $additional_timer_params.reduce({}) |Hash $memo, $item| {
+      $matches = $item.match(/^(.+)=(.*)$/)
+      notice( "matches: ${matches}")
+      $memo + { $matches[1] => $matches[2] }
     }
+  } else {
+    $_timer_overrides = $timer_overrides
+  }
+
+  # remove in V3
+  if $additional_service_params {
+    warning("Parameter 'additional_service_params is deprecated. Please use the alternative parameter 'service_overrides' instead.")
+    $_service_overrides = $additional_service_params.reduce({}) |Hash $memo, $item| {
+      $matches = $item.match(/^(.+)=(.*)$/)
+      notice( "matches: ${matches}")
+      $memo + { $matches[1] => $matches[2] }
+    }
+  } else {
+    $_service_overrides = $service_overrides
   }
 
   $file_ensure = $ensure ? {
@@ -69,28 +123,29 @@ define systemd_cron (
 
   $unit_name = regsubst($title, '/' , '_', 'G')
 
-  systemd::unit_file { "${unit_name}_cron.service":
-    ensure  => $file_ensure,
-    content => epp('systemd_cron/service.epp', {
-        'description'       => $service_description,
-        'command'           => $command,
-        'user'              => $user,
-        'type'              => $type,
-        'additional_params' => $additional_service_params,
-      }
-    ),
+  systemd::manage_unit { "${unit_name}_cron.service":
+    ensure        => $file_ensure,
+    unit_entry    => delete_undef_values({
+        'Description' => $service_description ,
+    }) + $service_unit_overrides,
+    service_entry => {
+      'ExecStart' => $command,
+      'User'      => $user,
+      'Type'      => $type,
+    } + $_service_overrides,
   }
-  systemd::unit_file { "${unit_name}_cron.timer":
-    ensure  => $file_ensure,
-    content => epp('systemd_cron/timer.epp', {
-        'description'       => $timer_description,
-        'on_calendar'       => $on_calendar,
-        'on_boot_sec'       => $on_boot_sec,
-        'on_unitactive_sec' => $on_unitactive_sec,
-        'additional_params' => $additional_timer_params,
-      }
-    ),
+  systemd::manage_unit { "${unit_name}_cron.timer":
+    ensure      => $file_ensure,
+    unit_entry  => delete_undef_values({
+        'Description' => $timer_description ,
+    }) + $timer_unit_overrides,
+    timer_entry => delete_undef_values({
+        'OnCalendar'      => $on_calendar,
+        'OnBootSec'       => $on_boot_sec,
+        'OnUnitActiveSec' => $on_unitactive_sec,
+    }) + $_timer_overrides,
   }
+
   service { "${unit_name}_cron.timer":
     ensure => $service_ensure,
     enable => $service_ensure,
