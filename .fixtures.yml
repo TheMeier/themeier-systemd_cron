@@ -1,7 +1,7 @@
 fixtures:
   forge_modules:
     systemd:
-      repo: 'camptocamp/systemd'
+      repo: 'puppet/systemd'
     stdlib:
       repo: 'puppetlabs/stdlib'
   symlinks:

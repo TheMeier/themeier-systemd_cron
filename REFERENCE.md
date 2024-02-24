@@ -6,7 +6,9 @@
 
 ### Defined types
 
-* [`systemd_cron`](#systemd_cron): systemd_cron Create systemd timer/service to replace cron jobs You either need to define on_calendar or on_boot_sec
+* [`systemd_cron`](#systemd_cron): systemd_cron
+Create systemd timer/service to replace cron jobs
+You either need to define on_calendar or on_boot_sec
 
 ## Defined types
 
@@ -33,70 +35,74 @@ systemd_cron { 'date':
 
 The following parameters are available in the `systemd_cron` defined type:
 
-* [`on_calendar`](#on_calendar)
-* [`on_boot_sec`](#on_boot_sec)
-* [`on_unitactive_sec`](#on_unitactive_sec)
-* [`command`](#command)
-* [`service_description`](#service_description)
-* [`ensure`](#ensure)
-* [`timer_description`](#timer_description)
-* [`type`](#type)
-* [`user`](#user)
-* [`additional_timer_params`](#additional_timer_params)
-* [`additional_service_params`](#additional_service_params)
+* [`on_calendar`](#-systemd_cron--on_calendar)
+* [`on_boot_sec`](#-systemd_cron--on_boot_sec)
+* [`on_unitactive_sec`](#-systemd_cron--on_unitactive_sec)
+* [`command`](#-systemd_cron--command)
+* [`service_description`](#-systemd_cron--service_description)
+* [`ensure`](#-systemd_cron--ensure)
+* [`timer_description`](#-systemd_cron--timer_description)
+* [`type`](#-systemd_cron--type)
+* [`user`](#-systemd_cron--user)
+* [`additional_timer_params`](#-systemd_cron--additional_timer_params)
+* [`additional_service_params`](#-systemd_cron--additional_service_params)
+* [`service_overrides`](#-systemd_cron--service_overrides)
+* [`timer_overrides`](#-systemd_cron--timer_overrides)
+* [`service_unit_overrides`](#-systemd_cron--service_unit_overrides)
+* [`timer_unit_overrides`](#-systemd_cron--timer_unit_overrides)
 
-##### <a name="on_calendar"></a>`on_calendar`
+##### <a name="-systemd_cron--on_calendar"></a>`on_calendar`
 
 Data type: `Optional[String]`
 
 systemd timer OnCalendar= definition when to run the
 service as defined in https://www.freedesktop.org/software/systemd/man/systemd.time.html
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="on_boot_sec"></a>`on_boot_sec`
+##### <a name="-systemd_cron--on_boot_sec"></a>`on_boot_sec`
 
 Data type: `Optional[Variant[Integer,String]]`
 
 systemd timer OnBootSec= definition
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="on_unitactive_sec"></a>`on_unitactive_sec`
+##### <a name="-systemd_cron--on_unitactive_sec"></a>`on_unitactive_sec`
 
 Data type: `Optional[Variant[Integer,String]]`
 
 systemd timer OnUnitActiveSec= definition
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="command"></a>`command`
+##### <a name="-systemd_cron--command"></a>`command`
 
 Data type: `Optional[String]`
 
 command string for ExecStart= defintion of the service to run
 as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="service_description"></a>`service_description`
+##### <a name="-systemd_cron--service_description"></a>`service_description`
 
 Data type: `Optional[String]`
 
 string for Description= defintion of the service
 as defined in https://www.freedesktop.org/software/systemd/man/systemd.service.html
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-systemd_cron--ensure"></a>`ensure`
 
 Data type: `Variant[Boolean,Enum['present','absent']]`
 
 removes the instance if set to false or absent
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="timer_description"></a>`timer_description`
+##### <a name="-systemd_cron--timer_description"></a>`timer_description`
 
 Data type: `String`
 
@@ -105,7 +111,7 @@ as defined in https://www.freedesktop.org/software/systemd/man/systemd.timer.htm
 
 Default value: `"timer for ${service_description}"`
 
-##### <a name="type"></a>`type`
+##### <a name="-systemd_cron--type"></a>`type`
 
 Data type: `String`
 
@@ -114,7 +120,7 @@ https://www.freedesktop.org/software/systemd/man/systemd.service.html
 
 Default value: `'oneshot'`
 
-##### <a name="user"></a>`user`
+##### <a name="-systemd_cron--user"></a>`user`
 
 Data type: `String`
 
@@ -123,23 +129,73 @@ https://www.freedesktop.org/software/systemd/man/systemd.service.html
 
 Default value: `'root'`
 
-##### <a name="additional_timer_params"></a>`additional_timer_params`
+##### <a name="-systemd_cron--additional_timer_params"></a>`additional_timer_params`
 
 Data type: `Optional[Array]`
 
-optional array with lines to append to [Timer] section
+**Deprecated** use `timer_overrides` instead
+can not be used in combination with `timer_overrides`
+
+array with lines to append to [Timer] section
 
 example: `'additional_timer_params'   => [ 'RandomizedDelaySec=10' ]`
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="additional_service_params"></a>`additional_service_params`
+##### <a name="-systemd_cron--additional_service_params"></a>`additional_service_params`
 
 Data type: `Optional[Array]`
 
-optional array with lines to append to [Service] section
+**Deprecated** use `service_overrides` instead
+can not be used in combination with `service_overrides`
 
-example: `'additional_service_params' => [ 'OnFailure=status-email-user@%n.service' ]`
+array with lines to append to [Service] section
 
-Default value: ``undef``
+example: `'additional_service_params' => [ 'User=bob' ]`
+
+Default value: `undef`
+
+##### <a name="-systemd_cron--service_overrides"></a>`service_overrides`
+
+Data type: `Systemd::Unit::Service`
+
+override for the`[Service]` section of the service
+can not be used in combination with `additional_service_params`
+
+example: `'service_overrides' => { 'Wants' => 'network-online.target' }`
+
+Default value: `{}`
+
+##### <a name="-systemd_cron--timer_overrides"></a>`timer_overrides`
+
+Data type: `Systemd::Unit::Timer`
+
+override for the`[Timer]` section of the timer
+can not be used in combination with `additional_timer_params`
+
+example: `'timer_overrides' => { 'OnBootSec' => '10' }`
+
+Default value: `{}`
+
+##### <a name="-systemd_cron--service_unit_overrides"></a>`service_unit_overrides`
+
+Data type: `Systemd::Unit::Unit`
+
+override for the`[Unit]` section of the service
+can not be used in combination with `additional_service_params`
+
+example: `'service_unit_overrides' => { 'Wants' => 'network-online.target' }`
+
+Default value: `{}`
+
+##### <a name="-systemd_cron--timer_unit_overrides"></a>`timer_unit_overrides`
+
+Data type: `Systemd::Unit::Unit`
+
+override for the `[Unit]` section of the timer
+can not be used in combination with `additional_timer_params`
+
+example: `'timer_unit_overrides' => { 'Documentation' => 'Very special timer' }`
+
+Default value: `{}`
 
