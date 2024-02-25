@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.0.0](https://github.com/TheMeier/themeier-systemd_cron/tree/v2.0.0) - 2024-02-24
+
+[Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v1.0.1...v2.0.0)
+
+### Changed
+- replace templating with system::manage_unit [#34](https://github.com/TheMeier/themeier-systemd_cron/pull/34) ([TheMeier](https://github.com/TheMeier))
+- Add Debian 12, drop Debian 9/CentOS/RedHat/Rocky [#33](https://github.com/TheMeier/themeier-systemd_cron/pull/33)([TheMeier](https://github.com/TheMeier))
+
 ## [v1.0.1](https://github.com/TheMeier/themeier-systemd_cron/tree/v1.0.1) - 2023-09-09
 
 [Full Changelog](https://github.com/TheMeier/themeier-systemd_cron/compare/v1.0.0...v1.0.1)
