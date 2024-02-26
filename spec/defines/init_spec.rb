@@ -119,6 +119,26 @@ describe 'systemd_cron' do
             .that_comes_before("Systemd::Unit_file[#{title}_cron.service]")
         }
       end
+      context 'ensure absent without command' do
+        let :title do
+          'date'
+        end
+
+        let :params do
+          {
+            ensure: 'absent',
+          }
+        end
+
+        it {
+          is_expected.to contain_Systemd__Manage_unit('date_cron.timer')
+          is_expected.to contain_Systemd__Manage_unit('date_cron.service')
+          is_expected.to contain_Service("#{title}_cron.timer")
+            .that_comes_before("Systemd::Unit_file[#{title}_cron.timer]")
+          is_expected.to contain_Systemd__Unit_file("#{title}_cron.timer")
+            .that_comes_before("Systemd::Unit_file[#{title}_cron.service]")
+        }
+      end
       context 'optional params' do
         let :title do
           'date'

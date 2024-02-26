@@ -121,6 +121,16 @@ define systemd_cron (
     default  => true,
   }
 
+  if $file_ensure == present {
+    $_execstart = $command
+  } else {
+    if $command {
+      $_execstart = $command
+    } else {
+      $_execstart = "/bin/true"
+    }
+  }
+
   $unit_name = regsubst($title, '/' , '_', 'G')
 
   systemd::manage_unit { "${unit_name}_cron.service":
@@ -129,7 +139,7 @@ define systemd_cron (
         'Description' => $service_description ,
     }) + $service_unit_overrides,
     service_entry => {
-      'ExecStart' => $command,
+      'ExecStart' => $_execstart,
       'User'      => $user,
       'Type'      => $type,
     } + $_service_overrides,
