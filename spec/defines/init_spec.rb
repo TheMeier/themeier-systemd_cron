@@ -106,7 +106,6 @@ describe 'systemd_cron' do
         let :params do
           {
             ensure: 'absent',
-            command: '/bin/true'
           }
         end
 
@@ -213,7 +212,6 @@ describe 'systemd_cron' do
         let :params do
           {
             on_boot_sec: 100,
-            on_unitactive_sec: 100,
             service_description: 'Print date',
             timer_description: 'Run date.service 100 seconds after boot',
           }

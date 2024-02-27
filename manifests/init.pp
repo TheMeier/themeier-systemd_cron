@@ -128,11 +128,11 @@ define systemd_cron (
     unit_entry    => delete_undef_values({
         'Description' => $service_description ,
     }) + $service_unit_overrides,
-    service_entry => {
-      'ExecStart' => $command,
-      'User'      => $user,
-      'Type'      => $type,
-    } + $_service_overrides,
+    service_entry => delete_undef_values({
+        'ExecStart' => $command, # if ensure present command is defined is checked above
+        'User'      => $user, # defaults apply
+        'Type'      => $type, # defaults apply
+    }) + $_service_overrides,
   }
   systemd::manage_unit { "${unit_name}_cron.timer":
     ensure      => $file_ensure,
