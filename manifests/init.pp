@@ -135,15 +135,18 @@ define systemd_cron (
     }) + $_service_overrides,
   }
   systemd::manage_unit { "${unit_name}_cron.timer":
-    ensure      => $file_ensure,
-    unit_entry  => delete_undef_values({
+    ensure        => $file_ensure,
+    unit_entry    => delete_undef_values({
         'Description' => $timer_description ,
     }) + $timer_unit_overrides,
-    timer_entry => delete_undef_values({
+    timer_entry   => delete_undef_values({
         'OnCalendar'      => $on_calendar,
         'OnBootSec'       => $on_boot_sec,
         'OnUnitActiveSec' => $on_unitactive_sec,
     }) + $_timer_overrides,
+    install_entry => {
+      'WantedBy' => 'timers.target',
+    },
   }
 
   service { "${unit_name}_cron.timer":
