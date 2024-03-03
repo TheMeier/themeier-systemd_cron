@@ -38,6 +38,7 @@ describe 'systemd_cron' do
         it {
           is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer")
             .with_content(%r{Description=timer for Print date cron})
+            .with_content(%r{WantedBy=timers.target})
         }
         it {
           is_expected.to contain_file("/etc/systemd/system/#{title}_cron.timer")
